@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["NEXT_PUBLIC_PROJECTS_LIST_URL", "SECRET_PASSPHRASE"],
   "tasks": {
     "build": {
       "outputs": [".next/**", "!.next/cache/**", "public/**"],
