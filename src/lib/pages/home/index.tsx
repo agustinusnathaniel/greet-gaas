@@ -1,9 +1,9 @@
 import {
   Button,
+  Link as ChakraLink,
   Grid,
   Heading,
   Image,
-  Link as ChakraLink,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import Balancer from 'react-wrap-balancer';

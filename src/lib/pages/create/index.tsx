@@ -14,9 +14,6 @@ import {
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-
 import {
   occasions,
   occasionsText,
@@ -24,6 +21,8 @@ import {
 import ControlledInput from 'lib/components/shared/form/ControlledInput';
 import FormControlWrapper from 'lib/components/shared/form/FormControlWrapper';
 import ModalWrapper from 'lib/components/shared/ModalWrapper';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import type { CreateFormType } from './models';
 import { createFormRequestScheme } from './models';
@@ -57,7 +56,7 @@ const Create = () => {
 
   const encryptText = (text: string) =>
     axios('/api/encrypt', { params: { text } }).then(
-      (res) => res.data as string
+      (res) => res.data as string,
     );
 
   const processString = async (text: string) =>
@@ -83,7 +82,7 @@ const Create = () => {
   const handleCopyLink = () => {
     navigator.clipboard
       .writeText(
-        `${document.location.protocol}//${document.location.host}${generatedUrl}`
+        `${document.location.protocol}//${document.location.host}${generatedUrl}`,
       )
       .then(() => {
         toast({

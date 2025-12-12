@@ -1,8 +1,7 @@
 import { ColorModeScript } from '@chakra-ui/react';
-import type { DocumentContext } from 'next/document';
-import Document, { Html, Head, Main, NextScript } from 'next/document';
-
 import customTheme from 'lib/styles/theme';
+import type { DocumentContext } from 'next/document';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
 
 export const APP_NAME = 'Greetings as a Service (GaaS)';
 const APP_DESCRIPTION = 'Greetings as a Service';

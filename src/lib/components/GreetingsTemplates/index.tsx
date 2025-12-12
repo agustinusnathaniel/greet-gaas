@@ -1,7 +1,6 @@
 import { Box, Grid, Heading, Image, Link, Text } from '@chakra-ui/react';
-import { NextSeo } from 'next-seo';
-
 import MotionBox from 'lib/components/MotionBox';
+import { NextSeo } from 'next-seo';
 
 import { occasionTemplates } from './templates';
 import type { GreetingsTemplateProps, OccasionTemplateType } from './types';
@@ -18,7 +17,7 @@ const imageSize = {
 
 const OccasionWrapper = ({ occasion, imageSrc }: OccasionWrapperProps) => {
   const selectedOccasionTemplate: OccasionTemplateType = occasionTemplates.find(
-    ({ type }) => type === occasion
+    ({ type }) => type === occasion,
   );
 
   return (
@@ -65,7 +64,7 @@ const GreetingsTemplate = ({
   imageSrc,
 }: GreetingsTemplateProps) => {
   const selectedOccasionTemplate: OccasionTemplateType = occasionTemplates.find(
-    ({ type }) => type === occasion
+    ({ type }) => type === occasion,
   );
 
   const description =

@@ -1,7 +1,7 @@
+import { encryptText } from 'lib/utils/encryptText';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { encryptText } from 'lib/utils/encryptText';
-
+// biome-ignore lint/suspicious/useAwait: -
 const encrpyt = async (req: NextApiRequest, res: NextApiResponse) => {
   const {
     query: { text },

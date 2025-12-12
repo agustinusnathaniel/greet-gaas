@@ -1,5 +1,4 @@
-import crypto from 'crypto';
-
+import crypto from 'node:crypto';
 import { occasionTemplates } from 'lib/components/GreetingsTemplates/templates';
 import type {
   OccasionsKeyType,
@@ -8,10 +7,10 @@ import type {
 
 export const getTemplateImage = (occasion: OccasionsKeyType) => {
   const selectedOccasionTemplate: OccasionTemplateType = occasionTemplates.find(
-    ({ type }) => type === occasion
+    ({ type }) => type === occasion,
   );
   const randomImageNum = crypto.randomInt(
-    selectedOccasionTemplate.imageSrc.length
+    selectedOccasionTemplate.imageSrc.length,
   );
 
   return selectedOccasionTemplate.imageSrc[randomImageNum];

@@ -18,7 +18,7 @@ export type OccasionTemplateType = {
  * transformed occasions key into text
  */
 export const occasionsText: Array<string> = occasions.map(
-  (occasion: OccasionsKeyType) => occasion.replace(/-/g, ' ')
+  (occasion: OccasionsKeyType) => occasion.replace(/-/g, ' '),
 );
 
 export type GreetingsTemplateProps = {
