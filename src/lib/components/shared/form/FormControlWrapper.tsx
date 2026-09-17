@@ -34,9 +34,14 @@ const FormControlWrapper = ({
       required={isRequiredValue}
       disabled={disabled}
     >
-      {label && <Field.Label>{label}</Field.Label>}
+      {label && (
+        <Field.Label>
+          {label}
+          {isRequiredValue && <Field.RequiredIndicator />}
+        </Field.Label>
+      )}
 
-      <Skeleton loading={!isLoaded}>
+      <Skeleton loading={!isLoaded} width="full">
         {children}
 
         {errorText && (
