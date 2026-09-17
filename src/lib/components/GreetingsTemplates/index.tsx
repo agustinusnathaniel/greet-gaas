@@ -1,6 +1,6 @@
 import { Box, Grid, Heading, Image, Link, Text } from '@chakra-ui/react';
 import MotionBox from 'lib/components/MotionBox';
-import { NextSeo } from 'next-seo';
+import Meta from 'lib/layout/Meta';
 
 import { occasionTemplates } from './templates';
 import type { GreetingsTemplateProps, OccasionTemplateType } from './types';
@@ -22,7 +22,9 @@ const OccasionWrapper = ({ occasion, imageSrc }: OccasionWrapperProps) => {
 
   return (
     <Grid gap={4} marginX={[0, 16, 32]} marginBottom={8}>
-      <Heading fontFamily="heading">{selectedOccasionTemplate.title}</Heading>
+      <Heading fontFamily="heading" size="3xl">
+        {selectedOccasionTemplate.title}
+      </Heading>
 
       <MotionBox
         animate={{ y: 20 }}
@@ -42,8 +44,10 @@ const OccasionWrapper = ({ occasion, imageSrc }: OccasionWrapperProps) => {
         (selectedOccasionTemplate.assetSource.url ? (
           <Link
             href={selectedOccasionTemplate.assetSource.url}
-            isExternal
+            target="_blank"
+            rel="noopener noreferrer"
             fontSize="xs"
+            justifyContent="center"
           >
             Illlustration by {selectedOccasionTemplate.assetSource.name}
           </Link>
@@ -72,17 +76,11 @@ const GreetingsTemplate = ({
 
   return (
     <>
-      <NextSeo
+      <Meta
         title={`Hello ${name}, ${selectedOccasionTemplate.title}`}
         description={`${selectedOccasionTemplate.title} greetings for ${name}`}
-        openGraph={{
-          images: [
-            {
-              url: `https://og.sznm.dev/api/generate?heading=Hello%20${name},%20${selectedOccasionTemplate.title}&text=${description}&template=color&center=true`,
-              alt: `${selectedOccasionTemplate.title} greetings for ${name} og-image`,
-            },
-          ],
-        }}
+        ogImage={`https://og.sznm.dev/api/generate?heading=Hello%20${name},%20${selectedOccasionTemplate.title}&text=${description}&template=color&center=true`}
+        ogImageAlt={`${selectedOccasionTemplate.title} greetings for ${name} og-image`}
       />
       <Grid textAlign="center" gap={2}>
         {name && (

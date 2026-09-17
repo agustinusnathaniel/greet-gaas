@@ -5,8 +5,8 @@ import {
   Heading,
   Image,
   Text,
-  useColorMode,
 } from '@chakra-ui/react';
+import { useColorMode } from 'lib/components/ui/color-mode';
 import Link from 'next/link';
 
 const Page404 = () => {
@@ -18,22 +18,27 @@ const Page404 = () => {
         <Image src="/404 Error-pana.svg" alt="404-image" />
       </Box>
       <Text textAlign="center" fontSize="xs">
-        <ChakraLink href="https://stories.freepik.com/web" isExternal>
+        <ChakraLink
+          href="https://stories.freepik.com/web"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Illustration by Freepik Stories
         </ChakraLink>
       </Text>
 
       <Box marginY={4}>
-        <Heading textAlign="center">Page not Found.</Heading>
+        <Heading textAlign="center" size="3xl">
+          Page not Found.
+        </Heading>
 
         <Box textAlign="center" marginTop={4}>
           <Text>It&apos;s Okay!</Text>
           <Button
-            as={Link}
-            href="/"
+            asChild
             backgroundColor={colorMode === 'light' ? 'gray.300' : 'teal.500'}
           >
-            Let&apos;s Head Back
+            <Link href="/">Let&apos;s Head Back</Link>
           </Button>
         </Box>
       </Box>

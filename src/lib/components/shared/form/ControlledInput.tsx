@@ -4,7 +4,8 @@ import type { FormControlWrapperProps } from 'lib/components/shared/form/FormCon
 import FormControlWrapper from 'lib/components/shared/form/FormControlWrapper';
 import * as React from 'react';
 
-export type ControlledInputProps = FormControlWrapperProps & InputProps;
+export type ControlledInputProps = Omit<FormControlWrapperProps, 'children'> &
+  Omit<InputProps, 'invalid' | 'required' | 'disabled'>;
 
 const ControlledInput = React.forwardRef(
   (
@@ -13,8 +14,11 @@ const ControlledInput = React.forwardRef(
       errorText,
       errorTextColor,
       isInvalid,
+      invalid,
       isLoaded,
       isRequired,
+      required,
+      disabled,
       ...inputProps
     }: ControlledInputProps,
     ref: React.ForwardedRef<HTMLInputElement>,
@@ -25,10 +29,18 @@ const ControlledInput = React.forwardRef(
         errorText={errorText}
         errorTextColor={errorTextColor}
         isInvalid={isInvalid}
+        invalid={invalid}
         isRequired={isRequired}
+        required={required}
+        disabled={disabled}
         isLoaded={isLoaded}
       >
-        <Input ref={ref} {...inputProps} isRequired={isRequired} />
+        <Input
+          ref={ref}
+          {...inputProps}
+          required={required ?? isRequired}
+          disabled={disabled}
+        />
       </FormControlWrapper>
     );
   },

@@ -1,49 +1,54 @@
-import type {
-  FormControlProps,
-  FormErrorMessageProps,
-  FormLabelProps,
-  SkeletonProps,
-} from '@chakra-ui/react';
-import {
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Skeleton,
-} from '@chakra-ui/react';
+import { Field, Skeleton } from '@chakra-ui/react';
 import type { ReactNode } from 'react';
 
 export type FormControlWrapperProps = {
-  label?: FormLabelProps['children'];
-  errorText?: FormErrorMessageProps['children'];
-  errorTextColor?: FormErrorMessageProps['color'];
-  isLoaded?: SkeletonProps['isLoaded'];
+  label?: ReactNode;
+  errorText?: ReactNode;
+  errorTextColor?: string;
+  isLoaded?: boolean;
+  invalid?: boolean;
+  isInvalid?: boolean;
+  required?: boolean;
+  isRequired?: boolean;
+  disabled?: boolean;
   children?: ReactNode;
-} & Pick<FormControlProps, 'isInvalid' | 'isRequired'>;
+};
 
 const FormControlWrapper = ({
   label,
   errorText,
   errorTextColor,
+  invalid,
   isInvalid,
+  required,
   isRequired,
+  disabled,
   isLoaded = true,
   children,
 }: FormControlWrapperProps) => {
+  const isInvalidValue = invalid || isInvalid || !!errorText;
+  const isRequiredValue = required || isRequired;
   return (
-    <FormControl isInvalid={isInvalid || !!errorText} isRequired={isRequired}>
-      <Flex alignItems="start">{label && <FormLabel>{label}</FormLabel>}</Flex>
+    <Field.Root
+      invalid={isInvalidValue}
+      required={isRequiredValue}
+      disabled={disabled}
+    >
+      {label && (
+        <Field.Label>
+          {label}
+          {isRequiredValue && <Field.RequiredIndicator />}
+        </Field.Label>
+      )}
 
-      <Skeleton isLoaded={isLoaded}>
+      <Skeleton loading={!isLoaded} width="full">
         {children}
 
         {errorText && (
-          <FormErrorMessage color={errorTextColor}>
-            {errorText}
-          </FormErrorMessage>
+          <Field.ErrorText color={errorTextColor}>{errorText}</Field.ErrorText>
         )}
       </Skeleton>
-    </FormControl>
+    </Field.Root>
   );
 };
 

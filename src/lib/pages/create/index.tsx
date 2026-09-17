@@ -2,6 +2,7 @@
 import {
   Box,
   Button,
+  createListCollection,
   Grid,
   Heading,
   Image,
@@ -10,10 +11,9 @@ import {
   Spinner,
   Text,
   useDisclosure,
-  useToast,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
+import { api } from 'lib/api/client';
 import {
   occasions,
   occasionsText,
@@ -21,8 +21,9 @@ import {
 import ControlledInput from 'lib/components/shared/form/ControlledInput';
 import FormControlWrapper from 'lib/components/shared/form/FormControlWrapper';
 import ModalWrapper from 'lib/components/shared/ModalWrapper';
+import { toaster } from 'lib/components/ui/toaster';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 import type { CreateFormType } from './models';
 import { createFormRequestScheme } from './models';
@@ -34,15 +35,22 @@ const initialValues: CreateFormType = {
   from: '',
 };
 
+const occasionCollection = createListCollection({
+  items: occasions.map((value, index) => ({
+    label: occasionsText[index] ?? value,
+    value,
+  })),
+});
+
 const Create = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
+  const { open, onOpen, onClose } = useDisclosure();
 
   const [generatedUrl, setGeneratedUrl] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const {
     watch,
+    control,
     register,
     formState: { errors, isValid },
     handleSubmit,
@@ -55,9 +63,7 @@ const Create = () => {
   const { name, occasion, customMessage, from } = values;
 
   const encryptText = (text: string) =>
-    axios('/api/encrypt', { params: { text } }).then(
-      (res) => res.data as string,
-    );
+    api.get('api/encrypt', { searchParams: { text } }).json<string>();
 
   const processString = async (text: string) =>
     decodeURI(await encryptText(text));
@@ -74,9 +80,19 @@ const Create = () => {
     }
     setLoading(true);
     onOpen();
-    const updateGeneratedUrl = await greetingRoute();
-    setGeneratedUrl(updateGeneratedUrl);
-    setLoading(false);
+    try {
+      const updateGeneratedUrl = await greetingRoute();
+      setGeneratedUrl(updateGeneratedUrl);
+    } catch {
+      toaster.create({
+        description: 'Failed to generate greeting link. Please try again.',
+        type: 'error',
+        closable: true,
+      });
+      onClose();
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCopyLink = () => {
@@ -85,11 +101,10 @@ const Create = () => {
         `${document.location.protocol}//${document.location.host}${generatedUrl}`,
       )
       .then(() => {
-        toast({
+        toaster.create({
           description: 'Link Copied! Now you just have to share it!',
-          status: 'success',
-          position: 'top',
-          isClosable: true,
+          type: 'success',
+          closable: true,
         });
       });
   };
@@ -100,33 +115,56 @@ const Create = () => {
 
   return (
     <Grid gap={6}>
-      <Heading letterSpacing={1}>Create a Greeting</Heading>
+      <Heading letterSpacing={1} size="3xl">
+        Create a Greeting
+      </Heading>
 
       <FormControlWrapper
         isRequired
         label="Occasion"
         errorText={errors.occasion?.message}
       >
-        <Select
-          {...register('occasion')}
-          isInvalid={!!errors.occasion?.message}
-          placeholder="what's the occasion?"
-          size="lg"
-          textTransform="capitalize"
-        >
-          {occasionsText.map((occasionText: string, index: number) => {
-            return (
-              <Text
-                style={{ textTransform: 'capitalize' }}
-                key={occasionText}
-                as="option"
-                value={occasions[index]}
-              >
-                {occasionText}
-              </Text>
-            );
-          })}
-        </Select>
+        <Controller
+          control={control}
+          name="occasion"
+          render={({ field }) => (
+            <Select.Root
+              collection={occasionCollection}
+              size="lg"
+              width="full"
+              name={field.name}
+              value={field.value ? [field.value] : []}
+              onValueChange={(details) =>
+                field.onChange(details.value[0] ?? '')
+              }
+            >
+              <Select.HiddenSelect />
+              <Select.Control>
+                <Select.Trigger borderRadius={24}>
+                  <Select.ValueText
+                    placeholder="what's the occasion?"
+                    style={{ textTransform: 'capitalize' }}
+                  />
+                </Select.Trigger>
+                <Select.IndicatorGroup>
+                  <Select.Indicator />
+                </Select.IndicatorGroup>
+              </Select.Control>
+              <Select.Positioner>
+                <Select.Content>
+                  {occasionCollection.items.map((item) => (
+                    <Select.Item item={item} key={item.value}>
+                      <Select.ItemText style={{ textTransform: 'capitalize' }}>
+                        {item.label}
+                      </Select.ItemText>
+                      <Select.ItemIndicator />
+                    </Select.Item>
+                  ))}
+                </Select.Content>
+              </Select.Positioner>
+            </Select.Root>
+          )}
+        />
       </FormControlWrapper>
 
       <ControlledInput
@@ -154,19 +192,19 @@ const Create = () => {
       <Button
         // disabled={!isDirty || !isValid}
         onClick={handleSubmit(generateLink)}
-        colorScheme="green"
+        colorPalette="green"
       >
         Generate!
       </Button>
 
       <ModalWrapper
-        isOpen={isOpen}
+        open={open}
         onClose={onClose}
         size="xs"
         header={loading ? 'Please Wait...' : 'Nice!'}
         body={
           loading ? (
-            <Spinner size="lg" textAlign="center" />
+            <Spinner size="lg" />
           ) : (
             <Grid gap={4}>
               <Box textAlign="center">
@@ -176,24 +214,33 @@ const Create = () => {
                   height={120}
                   marginX="auto"
                 />
-                <Link fontSize="xs" isExternal href="https://storyset.com/">
+                <Link
+                  fontSize="xs"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://storyset.com/"
+                >
                   Illustration by Freepik Storyset
                 </Link>
               </Box>
 
               <Text>Here is the greeting page generated:</Text>
 
-              <Button onClick={handleCopyLink} colorScheme="teal">
+              <Button onClick={handleCopyLink} colorPalette="teal">
                 Copy Link
               </Button>
 
-              <Button onClick={handleRoutePreview} colorScheme="yellow">
+              <Button onClick={handleRoutePreview} colorPalette="yellow">
                 Preview
               </Button>
             </Grid>
           )
         }
-        footer={<Button onClick={onClose}>Back</Button>}
+        footer={
+          <Button onClick={onClose} variant="subtle" colorPalette="gray">
+            Back
+          </Button>
+        }
       />
     </Grid>
   );
