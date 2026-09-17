@@ -2,11 +2,12 @@
 import {
   Box,
   Button,
+  createListCollection,
   Grid,
   Heading,
   Image,
   Link,
-  NativeSelect,
+  Select,
   Spinner,
   Text,
   useDisclosure,
@@ -22,7 +23,7 @@ import FormControlWrapper from 'lib/components/shared/form/FormControlWrapper';
 import ModalWrapper from 'lib/components/shared/ModalWrapper';
 import { toaster } from 'lib/components/ui/toaster';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 import type { CreateFormType } from './models';
 import { createFormRequestScheme } from './models';
@@ -34,6 +35,13 @@ const initialValues: CreateFormType = {
   from: '',
 };
 
+const occasionCollection = createListCollection({
+  items: occasions.map((value, index) => ({
+    label: occasionsText[index] ?? value,
+    value,
+  })),
+});
+
 const Create = () => {
   const { open, onOpen, onClose } = useDisclosure();
 
@@ -42,6 +50,7 @@ const Create = () => {
 
   const {
     watch,
+    control,
     register,
     formState: { errors, isValid },
     handleSubmit,
@@ -115,26 +124,47 @@ const Create = () => {
         label="Occasion"
         errorText={errors.occasion?.message}
       >
-        <NativeSelect.Root size="lg">
-          <NativeSelect.Field
-            {...register('occasion')}
-            placeholder="what's the occasion?"
-            style={{ textTransform: 'capitalize' }}
-          >
-            {occasionsText.map((occasionText: string, index: number) => {
-              return (
-                <option
-                  style={{ textTransform: 'capitalize' }}
-                  key={occasionText}
-                  value={occasions[index]}
-                >
-                  {occasionText}
-                </option>
-              );
-            })}
-          </NativeSelect.Field>
-          <NativeSelect.Indicator />
-        </NativeSelect.Root>
+        <Controller
+          control={control}
+          name="occasion"
+          render={({ field }) => (
+            <Select.Root
+              collection={occasionCollection}
+              size="lg"
+              width="full"
+              name={field.name}
+              value={field.value ? [field.value] : []}
+              onValueChange={(details) =>
+                field.onChange(details.value[0] ?? '')
+              }
+            >
+              <Select.HiddenSelect />
+              <Select.Control>
+                <Select.Trigger borderRadius={24}>
+                  <Select.ValueText
+                    placeholder="what's the occasion?"
+                    style={{ textTransform: 'capitalize' }}
+                  />
+                </Select.Trigger>
+                <Select.IndicatorGroup>
+                  <Select.Indicator />
+                </Select.IndicatorGroup>
+              </Select.Control>
+              <Select.Positioner>
+                <Select.Content>
+                  {occasionCollection.items.map((item) => (
+                    <Select.Item item={item} key={item.value}>
+                      <Select.ItemText style={{ textTransform: 'capitalize' }}>
+                        {item.label}
+                      </Select.ItemText>
+                      <Select.ItemIndicator />
+                    </Select.Item>
+                  ))}
+                </Select.Content>
+              </Select.Positioner>
+            </Select.Root>
+          )}
+        />
       </FormControlWrapper>
 
       <ControlledInput
