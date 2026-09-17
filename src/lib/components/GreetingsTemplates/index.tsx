@@ -47,6 +47,7 @@ const OccasionWrapper = ({ occasion, imageSrc }: OccasionWrapperProps) => {
             target="_blank"
             rel="noopener noreferrer"
             fontSize="xs"
+            justifyContent="center"
           >
             Illlustration by {selectedOccasionTemplate.assetSource.name}
           </Link>
