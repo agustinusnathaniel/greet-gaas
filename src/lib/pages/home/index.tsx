@@ -28,6 +28,7 @@ const Home = () => {
             target="_blank"
             rel="noopener noreferrer"
             href="https://storyset.com/"
+            justifyContent="center"
           >
             Illustration by Freepik Storyset
           </ChakraLink>
