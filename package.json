@@ -34,7 +34,7 @@
     "@types/crypto-js": "^4.2.2",
     "crypto-js": "^4.2.0",
     "ky": "2.1.0",
-    "motion": "13.4.0",
+    "motion": "13.3.0",
     "next": "^16.3.5",
     "next-themes": "0.4.6",
     "react": "^19.3.0",
@@ -45,7 +45,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.14",
+    "@biomejs/biome": "2.5.13",
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
     "@types/node": "^26.6.1",

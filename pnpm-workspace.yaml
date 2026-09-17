@@ -1,3 +1,9 @@
 allowBuilds:
   sharp: true
   unrs-resolver: true
+
+# Pinned below Vercel minimumReleaseAge cutoff (2026-09-16T05:45:32Z):
+# transitive ranges would otherwise float to releases published after it.
+overrides:
+  framer-motion: 13.3.0
+  get-east-asian-width: 1.6.0
