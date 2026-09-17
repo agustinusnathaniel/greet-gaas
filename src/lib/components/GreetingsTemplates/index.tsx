@@ -22,7 +22,9 @@ const OccasionWrapper = ({ occasion, imageSrc }: OccasionWrapperProps) => {
 
   return (
     <Grid gap={4} marginX={[0, 16, 32]} marginBottom={8}>
-      <Heading fontFamily="heading">{selectedOccasionTemplate.title}</Heading>
+      <Heading fontFamily="heading" size="3xl">
+        {selectedOccasionTemplate.title}
+      </Heading>
 
       <MotionBox
         animate={{ y: 20 }}

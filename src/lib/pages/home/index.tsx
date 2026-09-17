@@ -35,7 +35,7 @@ const Home = () => {
 
         <Heading
           letterSpacing={1}
-          size="2xl"
+          size="4xl"
           fontWeight="extrabold"
           textAlign={{ base: 'center', md: 'start' }}
         >

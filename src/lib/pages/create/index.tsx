@@ -106,7 +106,9 @@ const Create = () => {
 
   return (
     <Grid gap={6}>
-      <Heading letterSpacing={1}>Create a Greeting</Heading>
+      <Heading letterSpacing={1} size="3xl">
+        Create a Greeting
+      </Heading>
 
       <FormControlWrapper
         isRequired
