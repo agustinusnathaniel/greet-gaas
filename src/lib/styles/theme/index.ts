@@ -1,13 +1,50 @@
-import { extendTheme } from '@chakra-ui/react';
+import {
+  createSystem,
+  defaultConfig,
+  defineRecipe,
+  defineSlotRecipe,
+  defineTokens,
+} from '@chakra-ui/react';
 
-import { components } from './components';
-import { config } from './config';
-import { fonts } from './fonts';
-
-const customTheme = extendTheme({
-  fonts,
-  components,
-  config,
+const buttonRecipe = defineRecipe({
+  base: {
+    borderRadius: 24,
+  },
 });
 
-export default customTheme;
+const inputRecipe = defineRecipe({
+  base: {
+    borderRadius: 24,
+  },
+});
+
+const nativeSelectSlotRecipe = defineSlotRecipe({
+  slots: ['root', 'field', 'indicator'],
+  base: {
+    field: {
+      borderRadius: 24,
+    },
+  },
+});
+
+const tokens = defineTokens({
+  fonts: {
+    heading: { value: 'Caveat, sans-serif' },
+    body: { value: 'Outfit, sans-serif' },
+  },
+});
+
+export const system = createSystem(defaultConfig, {
+  theme: {
+    tokens,
+    recipes: {
+      button: buttonRecipe,
+      input: inputRecipe,
+    },
+    slotRecipes: {
+      nativeSelect: nativeSelectSlotRecipe,
+    },
+  },
+});
+
+export default system;

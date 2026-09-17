@@ -6,11 +6,10 @@ import {
   Heading,
   Image,
   Link,
-  Select,
+  NativeSelect,
   Spinner,
   Text,
   useDisclosure,
-  useToast,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
@@ -21,6 +20,7 @@ import {
 import ControlledInput from 'lib/components/shared/form/ControlledInput';
 import FormControlWrapper from 'lib/components/shared/form/FormControlWrapper';
 import ModalWrapper from 'lib/components/shared/ModalWrapper';
+import { toaster } from 'lib/components/ui/toaster';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -35,8 +35,7 @@ const initialValues: CreateFormType = {
 };
 
 const Create = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
+  const { open, onOpen, onClose } = useDisclosure();
 
   const [generatedUrl, setGeneratedUrl] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -85,11 +84,10 @@ const Create = () => {
         `${document.location.protocol}//${document.location.host}${generatedUrl}`,
       )
       .then(() => {
-        toast({
+        toaster.create({
           description: 'Link Copied! Now you just have to share it!',
-          status: 'success',
-          position: 'top',
-          isClosable: true,
+          type: 'success',
+          closable: true,
         });
       });
   };
@@ -107,26 +105,26 @@ const Create = () => {
         label="Occasion"
         errorText={errors.occasion?.message}
       >
-        <Select
-          {...register('occasion')}
-          isInvalid={!!errors.occasion?.message}
-          placeholder="what's the occasion?"
-          size="lg"
-          textTransform="capitalize"
-        >
-          {occasionsText.map((occasionText: string, index: number) => {
-            return (
-              <Text
-                style={{ textTransform: 'capitalize' }}
-                key={occasionText}
-                as="option"
-                value={occasions[index]}
-              >
-                {occasionText}
-              </Text>
-            );
-          })}
-        </Select>
+        <NativeSelect.Root size="lg">
+          <NativeSelect.Field
+            {...register('occasion')}
+            placeholder="what's the occasion?"
+            style={{ textTransform: 'capitalize' }}
+          >
+            {occasionsText.map((occasionText: string, index: number) => {
+              return (
+                <option
+                  style={{ textTransform: 'capitalize' }}
+                  key={occasionText}
+                  value={occasions[index]}
+                >
+                  {occasionText}
+                </option>
+              );
+            })}
+          </NativeSelect.Field>
+          <NativeSelect.Indicator />
+        </NativeSelect.Root>
       </FormControlWrapper>
 
       <ControlledInput
@@ -154,19 +152,19 @@ const Create = () => {
       <Button
         // disabled={!isDirty || !isValid}
         onClick={handleSubmit(generateLink)}
-        colorScheme="green"
+        colorPalette="green"
       >
         Generate!
       </Button>
 
       <ModalWrapper
-        isOpen={isOpen}
+        open={open}
         onClose={onClose}
         size="xs"
         header={loading ? 'Please Wait...' : 'Nice!'}
         body={
           loading ? (
-            <Spinner size="lg" textAlign="center" />
+            <Spinner size="lg" />
           ) : (
             <Grid gap={4}>
               <Box textAlign="center">
@@ -176,18 +174,23 @@ const Create = () => {
                   height={120}
                   marginX="auto"
                 />
-                <Link fontSize="xs" isExternal href="https://storyset.com/">
+                <Link
+                  fontSize="xs"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://storyset.com/"
+                >
                   Illustration by Freepik Storyset
                 </Link>
               </Box>
 
               <Text>Here is the greeting page generated:</Text>
 
-              <Button onClick={handleCopyLink} colorScheme="teal">
+              <Button onClick={handleCopyLink} colorPalette="teal">
                 Copy Link
               </Button>
 
-              <Button onClick={handleRoutePreview} colorScheme="yellow">
+              <Button onClick={handleRoutePreview} colorPalette="yellow">
                 Preview
               </Button>
             </Grid>

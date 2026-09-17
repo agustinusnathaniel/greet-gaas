@@ -42,7 +42,8 @@ const OccasionWrapper = ({ occasion, imageSrc }: OccasionWrapperProps) => {
         (selectedOccasionTemplate.assetSource.url ? (
           <Link
             href={selectedOccasionTemplate.assetSource.url}
-            isExternal
+            target="_blank"
+            rel="noopener noreferrer"
             fontSize="xs"
           >
             Illlustration by {selectedOccasionTemplate.assetSource.name}

@@ -23,7 +23,12 @@ const Home = () => {
             src="/High five-cuate.svg"
             alt="illustration"
           />
-          <ChakraLink fontSize="xs" isExternal href="https://storyset.com/">
+          <ChakraLink
+            fontSize="xs"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://storyset.com/"
+          >
             Illustration by Freepik Storyset
           </ChakraLink>
         </Grid>
@@ -38,14 +43,8 @@ const Home = () => {
         </Heading>
       </Grid>
 
-      <Button
-        as={Link}
-        href="/create"
-        size="lg"
-        marginX={[0, 16, 32]}
-        colorScheme="blue"
-      >
-        Create One
+      <Button asChild size="lg" marginX={[0, 16, 32]} colorPalette="blue">
+        <Link href="/create">Create One</Link>
       </Button>
     </Grid>
   );
