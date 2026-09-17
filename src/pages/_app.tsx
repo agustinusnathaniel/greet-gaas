@@ -5,9 +5,6 @@ import Layout from 'lib/layout';
 import { system } from 'lib/styles/theme';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { DefaultSeo } from 'next-seo';
-
-import defaultSEOConfig from '../../next-seo.config';
 
 import 'lib/styles/globals.css';
 
@@ -21,7 +18,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
             content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
           />
         </Head>
-        <DefaultSeo {...defaultSEOConfig} />
         <Layout>
           <Component {...pageProps} />
         </Layout>
