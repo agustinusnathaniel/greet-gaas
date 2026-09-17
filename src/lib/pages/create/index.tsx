@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
+import { api } from 'lib/api/client';
 import {
   occasions,
   occasionsText,
@@ -54,9 +54,7 @@ const Create = () => {
   const { name, occasion, customMessage, from } = values;
 
   const encryptText = (text: string) =>
-    axios('/api/encrypt', { params: { text } }).then(
-      (res) => res.data as string,
-    );
+    api.get('api/encrypt', { searchParams: { text } }).json<string>();
 
   const processString = async (text: string) =>
     decodeURI(await encryptText(text));
@@ -73,9 +71,19 @@ const Create = () => {
     }
     setLoading(true);
     onOpen();
-    const updateGeneratedUrl = await greetingRoute();
-    setGeneratedUrl(updateGeneratedUrl);
-    setLoading(false);
+    try {
+      const updateGeneratedUrl = await greetingRoute();
+      setGeneratedUrl(updateGeneratedUrl);
+    } catch {
+      toaster.create({
+        description: 'Failed to generate greeting link. Please try again.',
+        type: 'error',
+        closable: true,
+      });
+      onClose();
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCopyLink = () => {
