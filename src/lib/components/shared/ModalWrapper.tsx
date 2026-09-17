@@ -1,5 +1,6 @@
 import { Dialog, Portal } from '@chakra-ui/react';
 import type * as React from 'react';
+import { LuX } from 'react-icons/lu';
 
 export type ModalWrapperProps = {
   open: boolean;
@@ -50,7 +51,11 @@ const ModalWrapper = ({
                 {header}
               </Dialog.Header>
             )}
-            {withCloseButton && <Dialog.CloseTrigger />}
+            {withCloseButton && (
+              <Dialog.CloseTrigger>
+                <LuX />
+              </Dialog.CloseTrigger>
+            )}
 
             {body && <Dialog.Body>{body}</Dialog.Body>}
 
