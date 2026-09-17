@@ -23,7 +23,9 @@ export interface UseColorModeReturn {
 
 export function useColorMode(): UseColorModeReturn {
   const { resolvedTheme, setTheme, forcedTheme } = useTheme();
-  const colorMode = forcedTheme || resolvedTheme;
+  // Fall back to light on first render before next-themes resolves,
+  // so SSR and initial paint match the light baseline.
+  const colorMode = forcedTheme || resolvedTheme || 'light';
   const toggleColorMode = () => {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
