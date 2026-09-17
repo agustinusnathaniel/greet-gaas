@@ -206,7 +206,11 @@ const Create = () => {
             </Grid>
           )
         }
-        footer={<Button onClick={onClose}>Back</Button>}
+        footer={
+          <Button onClick={onClose} variant="subtle" colorPalette="gray">
+            Back
+          </Button>
+        }
       />
     </Grid>
   );
